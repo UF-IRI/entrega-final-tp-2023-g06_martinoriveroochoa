@@ -8,9 +8,13 @@ CONFIG += c++17
 #DEFINES += QT_DISABLE_DEPRECATED_BEFORE=0x060000    # disables all the APIs deprecated before Qt 6.0.0
 
 SOURCES += \
+    archivos.cpp \
+    gimnasio.cpp \
     libreria.cpp
 
 HEADERS += \
+    archivos.h \
+    gimnasio.h \
     libreria_global.h \
     libreria.h
 
@@ -19,3 +23,5 @@ unix {
     target.path = /usr/lib
 }
 !isEmpty(target.path): INSTALLS += target
+
+DISTFILES +=
