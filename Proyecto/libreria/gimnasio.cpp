@@ -2,7 +2,6 @@
 #include <ctime>
 #include <iostream>
 #include <ctime>
-#include "archivos.h"
 #include <fstream>
 #include <sstream>
 
@@ -30,7 +29,7 @@ bool esDomingo(){
     return fecha_actual->tm_wday == 0;
 }
 
-/*
+
 int buscarPorNombre(sClase* lista_clases,unsigned int tamClases, const std::string &nombre){
     for (unsigned int i=0;i< tamClases; ++i) {
       if(lista_clases[i].NombreClase==nombre){
@@ -41,15 +40,15 @@ int buscarPorNombre(sClase* lista_clases,unsigned int tamClases, const std::stri
 }
 
 int buscarPorNombreYHorario(sClase* lista_clases,unsigned int tamClases,const std::string &nombre,double HorarioClase){
-    for(unsigned int i=0;;i< tamClases; ++i) {
-    if(lista_clases[i].NombreClase==nombre && if(lista_clases[i].horario==HorarioClase)){
+    for(unsigned int i=0;i< tamClases; ++i) {
+         if(lista_clases[i].NombreClase==nombre && lista_clases[i].horario==HorarioClase){
            return i;
         }
     }
 
     return -1;
 }
-
+/*
 int chequearReserva(sAsistencia *listaAsistencia,unsigned int cantAsistencias, int idclase, int idcliente){
   for(unsigned int i=0;i..){
       if(listaAsistencia[i].idCliente==idcliente){

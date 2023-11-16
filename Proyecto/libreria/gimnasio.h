@@ -2,7 +2,6 @@
 #define GIMNASIO_H
 #include <iostream>
 #include <ctime>
-#include "archivos.h"
 #include <fstream>
 #include <sstream>
 
@@ -24,8 +23,8 @@ struct Clase {
     double horario;
 };typedef struct Clase sClase;
 
-//int buscarPorNombre(sClase* lista_clases,unsigned int tamClases, const std::string &nombre);
-//int buscarPorNombreYHorario(sClase* lista_clases,unsigned int tamClases,const std::string &nombre,double HorarioClase);
+int buscarPorNombre(sClase* lista_clases,unsigned int tamClases, const std::string &nombre);
+int buscarPorNombreYHorario(sClase* lista_clases,unsigned int tamClases,const std::string &nombre,double HorarioClase);
 
 bool esSabado();
 bool esDomingo();

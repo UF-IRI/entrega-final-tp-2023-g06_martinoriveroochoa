@@ -1,7 +1,6 @@
 #include "archivos.h"
 #include <fstream>
 #include <sstream>
-#include "gimnasio.h"
 
 void incrementarListaClases(sClase* &lista_clases, unsigned int &tamClases){
     if(lista_clases==nullptr){
@@ -11,7 +10,7 @@ void incrementarListaClases(sClase* &lista_clases, unsigned int &tamClases){
         return;
     }
     sClase* aux=new sClase[++tamClases];
-    for(unsigned int i=0;i<tamClases;i++){
+    for(unsigned int i=0;i<tamClases-1;i++){
         aux[i]=lista_clases[i];
     }
     delete[]lista_clases;
@@ -34,13 +33,14 @@ void leerArchivosCSV(std::ifstream &archivo_clases, sClase *& lista_clases,unsig
       ss<<linea;
 
       incrementarListaClases(lista_clases,tamClases);
+      char comma=';';
 
-      std::getline(ss,linea,',');//idClase
+      std::getline(ss,linea,comma);//idClase
       lista_clases[tamClases-1].idClase=std::stoi(linea);
-      std:: getline(ss,lista_clases[tamClases-1].NombreClase,',');//nombreclase
-      std::getline(ss,linea,',');//horario
+      std:: getline(ss,lista_clases[tamClases-1].NombreClase,comma);//nombreclase
+      std::getline(ss,linea,comma);//horario
       lista_clases[tamClases-1].horario=std::stod(linea);
-      std::getline(ss,linea,',');//cupo
+      std::getline(ss,linea,comma);//cupo
       lista_clases[tamClases-1].cupo=std::stoi(linea);
 
     }

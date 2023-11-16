@@ -17,8 +17,8 @@ typedef struct Inscripcion sInscripcion;
 
 int main() {
 
-    unsigned int primera_opcion, segunda_opcion;
-    int exitoClase, PosicionClase;
+    unsigned int primera_opcion, segunda_opcion, IDCLIENTE;
+    int exitoClase, PosicionClase, PosicionMusculacion;
     std::string ClaseRequerida;
     double HorarioMusculacion, HorarioClase;
     std::cout<<"Bienvenido a Musculito"<<std::endl;
@@ -40,7 +40,7 @@ int main() {
           std::cout << "¡Hoy es Sabado!. Los Domingos no abre nuestro gimnasio. Intente nuevamente otro dia" << std::endl;
         }
         else {
-        /*
+
          ifstream archivo_clases;
          archivo_clases.open("iriClasesGYM.csv");
 
@@ -48,9 +48,12 @@ int main() {
           sClase *lista_clases=nullptr;
           unsigned int tamClases=0;
 
-         //leerArchivosCSV(archivo_clases,lista_clases,tamClases);
+         leerArchivosCSV(archivo_clases,lista_clases,tamClases);
+
+
 
           archivo_clases.close();
+
 
           std::cout<<"Eligio hacer una reserva"<<std::endl<<"Ingrese la opcion de lo que desea reservar"<<std::endl<<"1.Clase"<<std::endl<<"2.Musculacion"<<std::endl;
           std::cin>>segunda_opcion;
@@ -62,79 +65,78 @@ int main() {
               std::cout<<"Buscando "<<ClaseRequerida<<"..."<<std::endl;
               //busca
 
-              /*exitoClase=buscarPorNombre(lista_clases,tamClases,ClaseRequerida);
+              exitoClase=buscarPorNombre(lista_clases,tamClases,ClaseRequerida);
               if (exitoClase==0){
                   std::cout << "La clase fue encontrada." << std::endl;
-                  std::cout << "Ahora necesitaremos el horario que desees."<< std::endl<<"Recorda ingresar de la siguiente manera: Ej.7.00,7.30."<< std::endl;
+                  std::cout << "Ahora necesitaremos el horario que desees."<< std::endl<<"Recorda ingresar de la siguiente manera: Ej.7.0,7.3."<< std::endl;
                   std::cin>>HorarioClase;
+
                   PosicionClase=buscarPorNombreYHorario(lista_clases,tamClases,ClaseRequerida,HorarioClase);
+
                   if(PosicionClase!=-1){
-                  std::cout << "La clase fue encontrada." << std::endl;
-                  std::cout<<"Para continuar vamos a necesitar que ingreses tu id:"<< std::endl;
-                  std::cin>>IDCLIENTE;
+                      std::cout << "La clase fue encontrada." << std::endl;
+                      std::cout<<"Para continuar vamos a necesitar que ingreses tu id:"<< std::endl;
+                      std::cin>>IDCLIENTE;
+                     /*
+
+                     const std::string nombreArchivo= "asistencias_1697673600000.dat";
+                     sAsistencia *listaAsistencias=nullptr;
+                     unsigned int cantAsistencias=0;
 
 
-                  const std::string nombreArchivo= "asistencias_1697673600000.dat";
-                  sAsistencia *listaAsistencias=nullptr;
-                  unsigned int cantAsistencias=0;
+                     leerArchivoBinario(nombreArchivo, listaAsistencias, cantAsistencias);
 
 
-                  leerArchivoBinario(nombreArchivo, listaAsistencias, cantAsistencias);
+                     int n=chequearReserva(listaAsistencia,cantAsistencias, lista_clases[PosicionClase].idClase, IDCLIENTE);
 
+                     delete[]listaAsistencias;
 
-                  int n=chequearReserva(listaAsistencia,cantAsistencias, lista_clases[PosicionClase].idClase, IDCLIENTE);
-
-
-
-
-
-
-
-                  delete[]listaAsistencias;
-
-
-
-                  }
+                     */
+                    }
                   else {
-                  std::cout << "No se encontró ninguna clase con el horario especificado." << std::endl;
-                  }
-              }
+                     std::cout << "No se encontró ninguna clase con el horario especificado." << std::endl;
+                    }
+                }
               else if(exitoClase==1){
 
                   std::cout << "No se encontró ninguna clase con el nombre especificado." << std::endl;
-
-
-          }
-          else if(segunda_opcion==2){
+                }
+            }
+           else if(segunda_opcion==2){
               std::cout<<"Eligio reservar en musculacion"<<std::endl;
               std::cout<<"Recuerde que se reserva en periodos de 30 minutos"<<endl;
-              std::cout<<"Ingrese horario que desee:"<< std::endl<<"Ej.7.00,7.30."<<std::endl;
+              std::cout<<"Ingrese horario que desee:"<< std::endl<<"Ej.7.0,7.3."<<std::endl;
               std::cin>>HorarioMusculacion;
-              std::cout<<HorarioMusculacion<<std::endl;
-          }
-          else{
+
+
+              string musculacion="musculacion";
+              PosicionMusculacion=buscarPorNombreYHorario(lista_clases,tamClases,musculacion,HorarioMusculacion);
+              if(PosicionMusculacion>0){
+                  std::cout<<"Todo va en orden"<<std::endl<<"Por favor, ingrese su id:"<<std::endl;
+                }
+              else if(PosicionMusculacion==-1){
+                  std::cout<<"No hay musculacion a ese horario, lo siento."<<std::endl;
+              }
+            }
+           else if (segunda_opcion!=1 && segunda_opcion!=2){
               std::cout<<"Ingreso algo incorrecto"<<std::endl;
-          }
+            }
 
 
-          if (lista_clases!=nullptr){
-              delete[] lista_clases;
-              lista_clases=nullptr;
-          }
-          }*/
-
+           if (lista_clases!=nullptr){
+             delete[] lista_clases;
+             lista_clases=nullptr;
+            }
         }
-
     }
-
     else {
-      std::cout<<"Ingreso un numero incorrecto, vuelva a ingresar"<<std::endl;
+       std::cout<<"Ingreso un numero incorrecto, vuelva a ingresar"<<std::endl;
     }
-
-
 
     return 0;
 }
+
+
 
 /*
     ofstream archivoTXT("Probando.txt");
