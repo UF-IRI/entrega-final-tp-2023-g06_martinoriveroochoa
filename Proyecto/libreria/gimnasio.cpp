@@ -48,13 +48,13 @@ int buscarPorNombreYHorario(sClase* lista_clases,unsigned int tamClases,const st
 
     return -1;
 }
-/*
-int chequearReserva(sAsistencia *listaAsistencia,unsigned int cantAsistencias, int idclase, int idcliente){
-  for(unsigned int i=0;i..){
-      if(listaAsistencia[i].idCliente==idcliente){
-         for(unsigned j=0;...){
-            if(listaAsistencia[i].Inscripcion[j].idClase==idclase){
-              std::cout"Ya esta anotado"
+
+int chequearSuReserva(sAsistencia *&lista_asistencia,unsigned int &tamAsistencias, int idclase, int idcliente){
+  for(unsigned int i=0;i<tamAsistencias;i++){
+      if(lista_asistencia[i].idCliente==idcliente){
+         for(unsigned j=0;j<lista_asistencia[i].cantInscriptos;j++){
+            if(lista_asistencia[i].CursosInscriptos[j].idCurso==idclase){
+                 std::cout<<"Ya esta anotado"<<std::endl;
               return -1;
             }
             else{
@@ -66,4 +66,59 @@ int chequearReserva(sAsistencia *listaAsistencia,unsigned int cantAsistencias, i
   }
 
 }
+
+int ChequearSuCupo(sAsistencia*& lista_asistencias, unsigned int &tamAsistencias,int idclase, int cupo){
+int cont=0;
+  for (unsigned int i=0;i<tamAsistencias;i++){
+     for(unsigned int j=0;j<lista_asistencias[i].cantInscriptos;j++){
+
+        if(lista_asistencias[i].CursosInscriptos[j].idCurso==idclase){
+
+        cont++;
+       }
+    }
+
+    if (cont==cupo){
+
+     return -1;//no hay mas lugar
+    }
+
+    else if(cont<cupo){
+
+     return 0; //queda lugar
+     //restar UN CUPO EN MAIN
+    }
+
+   }
+}
+
+/*
+int agregarAsistencia(sAsistencia *listaAsistencia, unsigned int cantAsistencias, sInscripcion *listaInscripciones, int idcliente, int idclase, int hora_act){
+
+//chequeo primero si ya se anoto a alguna clase de mañana
+
+   for(unsigned int i=0;i<cantAsistencias;i++){
+      if(listaAsistencia[i].idCliente==idcliente){
+
+      //ya estaba anotada en alguna
+      resize(listaInscripciones,listaAsistencia[i].cantInscriptos) //agrega 1 lugar a la lista de inscripciones
+      listaAsistencia[i].cantInscriptos++;
+      listaAsistencias[i].CursosInscriptos[cantInscriptos-1].idCurso=idclase;
+      listaAsistencias[i].CursosInscriptos[canInscriptos-1].timestamp=hora_act; //chequear desp variable si es entero u otra
+      return 0;
+      }
+   }
+   if(i==cantAsistencias){
+    //no estaba anotada todavia
+    resize(listaAsistencia,cantAsistencias);
+    listaAsistencia[cantAsistencia-1].idCliente=idcliente;
+    listaAsistencia[cantAsistencia-1].cantInscriptos=1;
+    listaAsistencia[cantAsistencia-1].CursosInscriptos[cantInscriptos-1].idCurso=idclase;
+    listaAsistencia[cantAsistencia-1].CursosInscriptos[cantInscriptos-1].timestamp=hora_act;
+    return 0;
+    }
+    else{
+    return -1;
+    }
+
 */

@@ -7,14 +7,14 @@
 
 struct Inscripcion{
     int idCurso;
-    unsigned int timestamp;
+    time_t timestamp;
 };typedef struct Inscripcion sInscripcion;
 
 
 struct Asistencia{
     int idCliente;
     unsigned int cantInscriptos;
-    Inscripcion* CursosInscriptos;//array dinamico
+    Inscripcion *CursosInscriptos;//array dinamico
 }; typedef struct Asistencia sAsistencia;
 
 struct Clase {
@@ -25,6 +25,8 @@ struct Clase {
 
 int buscarPorNombre(sClase* lista_clases,unsigned int tamClases, const std::string &nombre);
 int buscarPorNombreYHorario(sClase* lista_clases,unsigned int tamClases,const std::string &nombre,double HorarioClase);
+int chequearSuReserva(sAsistencia*& lista_asistencias, unsigned int &tamAsistencias,int idclase, int idcliente);
+int ChequearSuCupo(sAsistencia*& lista_asistencias, unsigned int &tamAsistencias,int idclase, int cupo);
 
 bool esSabado();
 bool esDomingo();

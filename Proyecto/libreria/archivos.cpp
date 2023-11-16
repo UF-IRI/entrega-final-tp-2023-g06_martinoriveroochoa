@@ -1,6 +1,9 @@
 #include "archivos.h"
 #include <fstream>
 #include <sstream>
+#include "gimnasio.h"
+
+
 
 void incrementarListaClases(sClase* &lista_clases, unsigned int &tamClases){
     if(lista_clases==nullptr){
@@ -45,32 +48,56 @@ void leerArchivosCSV(std::ifstream &archivo_clases, sClase *& lista_clases,unsig
 
     }
 }
-/*
- void resizeLista(Asistencia*& listaAsistencias, unsigned int& capacidad, unsigned int nuevoTam){
-Asistencia * nuevaLista= new Asistencia [nuevoTam];
 
-for(unsigned int i =0; i < capacidad; ++i) {
-        nuevaLista[i] = listaAsistencias[i];
+void resizeLista(Asistencia*& lista_asistencias, unsigned int& tamAsistencias){
+    sAsistencia * aux= new sAsistencia [++tamAsistencias];
+
+    for(unsigned int i =0; i < tamAsistencias-1; ++i) {
+      aux[i] = lista_asistencias[i];
     }
 
     // Liberar la memoria de la lista antigua
-    delete[] listaAsistencias;
+    delete[] lista_asistencias;
 
     // Actualizar la lista y la capacidad
-    listaAsistencias = nuevaLista;
-    capacidad = nuevoTam;
-
+    lista_asistencias = aux;
 }
 
-void leerArchivoBinario(std::string &nombreArchivo, Asistencia *& listaAsistencias, unsigned int cantAsistencias){
-std:: ifstream archivo_binario(nombreArchivo,std::ios::binary);
+void leerArchivoBinario(std::ifstream &archivo_binario,sAsistencia *&lista_asistencias,unsigned int &tamAsistencias){
+
 
     if(!archivo_binario.is_open()){
-        std::cout<< "No se pudo abrir el archivo binario." << std::endl;
-        return;
+      std::cout<<"Error al abrir el archivo"<<std::endl;
+      return;
     }
 
+    unsigned int idCliente_aux=0, cantInscritos_aux=0;
 
+    while(archivo_binario){
+      resizeLista(lista_asistencias,tamAsistencias);
+      archivo_binario.read((char *)&idCliente_aux,sizeof(unsigned int));
+      archivo_binario.read((char *)&cantInscritos_aux,sizeof(unsigned int));
+
+      lista_asistencias[tamAsistencias-1].CursosInscriptos = new sInscripcion[cantInscritos_aux];
+
+      for(unsigned int i=0;i<cantInscritos_aux;i++){
+            archivo_binario.read((char*)&lista_asistencias[tamAsistencias-1].CursosInscriptos[i].idCurso,sizeof(unsigned int));
+            archivo_binario.read((char*)&lista_asistencias[tamAsistencias-1].CursosInscriptos[i].timestamp,sizeof(time_t));
+
+
+      }
+       delete[] lista_asistencias[tamAsistencias-1].CursosInscriptos ;
+
+
+    }
+
+    delete[] lista_asistencias;
+    tamAsistencias = 0;
 
 }
- */
+
+
+
+
+
+

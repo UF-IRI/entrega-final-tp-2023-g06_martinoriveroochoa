@@ -17,8 +17,8 @@ typedef struct Inscripcion sInscripcion;
 
 int main() {
 
-    unsigned int primera_opcion, segunda_opcion, IDCLIENTE;
-    int exitoClase, PosicionClase, PosicionMusculacion;
+    unsigned int primera_opcion, segunda_opcion, IDCLIENTE, IdCLIENTEmusculacion;
+    int exitoClase, PosicionClase, PosicionMusculacion, chequearReserva,chequearCupo, AgregarReserva;
     std::string ClaseRequerida;
     double HorarioMusculacion, HorarioClase;
     std::cout<<"Bienvenido a Musculito"<<std::endl;
@@ -48,11 +48,22 @@ int main() {
           sClase *lista_clases=nullptr;
           unsigned int tamClases=0;
 
-         leerArchivosCSV(archivo_clases,lista_clases,tamClases);
+          leerArchivosCSV(archivo_clases,lista_clases,tamClases);
 
 
 
           archivo_clases.close();
+
+          ifstream archivo_binario;
+          archivo_binario.open("asistencias_1697673600000.dat",std::ios::binary);
+
+
+          sAsistencia *lista_asistencias=nullptr;
+          unsigned int tamAsistencias=0;
+
+          leerArchivoBinario(archivo_binario,lista_asistencias,tamAsistencias);
+          archivo_binario.close();
+
 
 
           std::cout<<"Eligio hacer una reserva"<<std::endl<<"Ingrese la opcion de lo que desea reservar"<<std::endl<<"1.Clase"<<std::endl<<"2.Musculacion"<<std::endl;
@@ -77,21 +88,29 @@ int main() {
                       std::cout << "La clase fue encontrada." << std::endl;
                       std::cout<<"Para continuar vamos a necesitar que ingreses tu id:"<< std::endl;
                       std::cin>>IDCLIENTE;
-                     /*
-
-                     const std::string nombreArchivo= "asistencias_1697673600000.dat";
-                     sAsistencia *listaAsistencias=nullptr;
-                     unsigned int cantAsistencias=0;
 
 
-                     leerArchivoBinario(nombreArchivo, listaAsistencias, cantAsistencias);
+
+                      //ya esta cargada la lista ahora chequear que no este ya inscripto a esa
+
+                      chequearReserva=chequearSuReserva(lista_asistencias,tamAsistencias,lista_clases[PosicionClase].idClase,IDCLIENTE);
+                          if(chequearReserva==0){
+                          std::cout<< "Perfecto, usted no esta inscripto aun." << std::endl;
+                             chequearCupo=ChequearSuCupo(lista_asistencias,tamAsistencias,lista_clases[PosicionClase].idClase, lista_clases[PosicionClase].cupo);
+                             if(chequearCupo==0){
+                                  std::cout<< "Todavia queda lugar! Continuamos con tu reserva..." << std::endl;
+                              }
+                             else if(chequearCupo==-1){
+                                  std::cout<< "Lo siento, la clase elegida esta llena. Intente con otra!" << std::endl;
+                             }
 
 
-                     int n=chequearReserva(listaAsistencia,cantAsistencias, lista_clases[PosicionClase].idClase, IDCLIENTE);
+                          }
+                          else if(chequearReserva==-1){
+                          std::cout<< "Ya tienes una reserva para esa clase." << std::endl;
+                          }
 
-                     delete[]listaAsistencias;
 
-                     */
                     }
                   else {
                      std::cout << "No se encontró ninguna clase con el horario especificado." << std::endl;
@@ -113,6 +132,17 @@ int main() {
               PosicionMusculacion=buscarPorNombreYHorario(lista_clases,tamClases,musculacion,HorarioMusculacion);
               if(PosicionMusculacion>0){
                   std::cout<<"Todo va en orden"<<std::endl<<"Por favor, ingrese su id:"<<std::endl;
+                  std::cin>>IdCLIENTEmusculacion;
+                  chequearReserva=chequearSuReserva(lista_asistencias,tamAsistencias,lista_clases[PosicionMusculacion].idClase,IdCLIENTEmusculacion);
+                  if(chequearReserva==0){
+                   std::cout<< "Perfecto, usted no esta inscripto aun." << std::endl; //como no hay cupos limitados
+                   std::cout<< "Continuamos con tu reserva..." << std::endl;
+
+                  }
+                  else if(chequearReserva==-1){
+                   std::cout<< "Ya tienes una reserva para ese horario." << std::endl;
+                  }
+
                 }
               else if(PosicionMusculacion==-1){
                   std::cout<<"No hay musculacion a ese horario, lo siento."<<std::endl;
