@@ -92,6 +92,12 @@ int cont=0;
    }
 }
 
+std::tm obtenerHoraActual(){
+   std:: time_t tiempo_actual=std::time(nullptr);
+   std:: tm* hora_actual= std::localtime(&tiempo_actual);
+
+   return *hora_actual;
+}
 /*
 int agregarAsistencia(sAsistencia *listaAsistencia, unsigned int cantAsistencias, sInscripcion *listaInscripciones, int idcliente, int idclase, int hora_act){
 

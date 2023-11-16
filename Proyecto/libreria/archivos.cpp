@@ -82,7 +82,7 @@ void leerArchivoBinario(std::ifstream &archivo_binario,sAsistencia *&lista_asist
 
       for(unsigned int i=0;i<cantInscritos_aux;i++){
             archivo_binario.read((char*)&lista_asistencias[tamAsistencias-1].CursosInscriptos[i].idCurso,sizeof(unsigned int));
-            archivo_binario.read((char*)&lista_asistencias[tamAsistencias-1].CursosInscriptos[i].timestamp,sizeof(time_t));
+            archivo_binario.read((char*)&lista_asistencias[tamAsistencias-1].CursosInscriptos[i].timestamp,sizeof(tm));
 
 
       }
@@ -93,6 +93,52 @@ void leerArchivoBinario(std::ifstream &archivo_binario,sAsistencia *&lista_asist
 
     delete[] lista_asistencias;
     tamAsistencias = 0;
+
+}
+void resizeInscripcion(sInscripcion *&CursoInscripto, unsigned int &cantInscriptos){
+    sInscripcion *aux=new sInscripcion[++cantInscriptos];
+
+    for(unsigned int i=0; i < cantInscriptos-1;i++){
+       aux[i]=CursoInscripto[i];
+    }
+
+    delete [] CursoInscripto;
+    CursoInscripto=aux;
+
+
+}
+int AgregarAsistencia(sAsistencia *&lista_asistencias, unsigned int &tamAsistencias, unsigned int idcliente, unsigned int idcurso, std::tm horaact){
+    for(unsigned int i=0; i<tamAsistencias;i++){
+       if(lista_asistencias[i].idCliente==idcliente){
+            //ya esta en la lista
+            resizeInscripcion(lista_asistencias[i].CursosInscriptos,lista_asistencias[i].cantInscriptos);
+            sInscripcion InscripcionNueva;
+            InscripcionNueva.idCurso=idcurso;
+            InscripcionNueva.timestamp=horaact;
+
+            lista_asistencias[i].CursosInscriptos[lista_asistencias[i].cantInscriptos-1]=InscripcionNueva;
+
+            return 0;
+       }
+    }
+
+
+    //si no esta.
+    sAsistencia nuevaAsistencia;
+    nuevaAsistencia.idCliente= idcliente;
+    nuevaAsistencia.cantInscriptos=1;
+    nuevaAsistencia.CursosInscriptos=new sInscripcion[1];
+    nuevaAsistencia.CursosInscriptos[0].idCurso=idcurso;
+    nuevaAsistencia.CursosInscriptos[0].timestamp=horaact;
+
+    resizeLista(lista_asistencias,tamAsistencias);
+
+    lista_asistencias[tamAsistencias-1]=nuevaAsistencia;
+
+
+
+    delete [] nuevaAsistencia.CursosInscriptos;
+    return 0; //agregado con exito
 
 }
 

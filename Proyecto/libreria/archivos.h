@@ -20,5 +20,7 @@ void leerArchivosCSV(std::ifstream &archivo_clases, sClase *& lista_clases,unsig
 void escribirTXT(std::ofstream &archivoTXT);*/
 void resizeLista(Asistencia*& listaAsistencias, unsigned int& tamAsistencias);
 void leerArchivoBinario(std::ifstream &archivo_binario,sAsistencia *&lista_asistencias,unsigned int &tamAsistencias);
+void resizeInscripcion(sInscripcion *&CursoInscripto, unsigned int &cantInscriptos);
+int AgregarAsistencia(sAsistencia *&lista_asistencias, unsigned int &tamAsistencias, unsigned int idcliente, unsigned int idcurso, tm horaact);
 
 #endif // ARCHIVOS_H

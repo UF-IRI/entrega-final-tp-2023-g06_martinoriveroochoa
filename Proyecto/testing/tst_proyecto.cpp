@@ -39,7 +39,7 @@ TEST_CASE("Leer archivo CSV y guardar en lista", "[leerArchivosCSV]"){
     archivo_input.close();
 }
 
-/*
+
 TEST_CASE("Buscar por Nombre", "[buscarxnombre]"){
     sClase *listita=new sClase[2];
 
@@ -74,9 +74,9 @@ TEST_CASE("Buscar por Nombre y Hora", "[buscarxnombreyhora]"){
     listita[1].cupo=35;
 
 
-    int resultado=buscarPorNombre(listita,2,"spinning",17.00);
+    int resultado=buscarPorNombreYHorario(listita,2,"spinning",17.00);
 
     REQUIRE(resultado==0);
 
 }
-*/
+
