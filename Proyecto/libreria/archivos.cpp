@@ -5,7 +5,7 @@
 
 
 
-void incrementarListaClases(sClase* &lista_clases, unsigned int &tamClases){
+void incrementarListaClases(sClase *&lista_clases, unsigned int &tamClases){
     if(lista_clases==nullptr){
         if(tamClases==0){
             lista_clases=new sClase[++tamClases];
@@ -22,7 +22,7 @@ void incrementarListaClases(sClase* &lista_clases, unsigned int &tamClases){
 }
 
 
-void leerArchivosCSV(std::ifstream &archivo_clases, sClase *& lista_clases,unsigned int &tamClases){
+void leerArchivosCSVClase(std::ifstream &archivo_clases, sClase *& lista_clases,unsigned int &tamClases){
     std::string linea;
     std::stringstream ss;
 
@@ -45,6 +45,60 @@ void leerArchivosCSV(std::ifstream &archivo_clases, sClase *& lista_clases,unsig
       lista_clases[tamClases-1].horario=std::stod(linea);
       std::getline(ss,linea,comma);//cupo
       lista_clases[tamClases-1].cupo=std::stoi(linea);
+
+    }
+}
+
+
+void incrementarListaClientes(sCliente* &lista_clientes, unsigned int &tamClientes){
+    if(lista_clientes==nullptr){
+      if(tamClientes==0){
+            lista_clientes=new sCliente[++tamClientes];
+      }
+      return;
+    }
+    sCliente* aux=new sCliente[++tamClientes];
+    for(unsigned int i=0;i<tamClientes-1;i++){
+      aux[i]=lista_clientes[i];
+    }
+    delete[]lista_clientes;
+    lista_clientes=aux;
+    return;
+}
+
+void leerArchivosCSVClientes(std::ifstream &archivo_clientes, sCliente *& lista_clientes,unsigned int &tamClientes){
+    std::string linea;
+    std::stringstream ss;
+
+    if(!archivo_clientes.is_open()){
+      return;
+    }
+
+    std::getline(archivo_clientes,linea);//lee encabezado
+    while(std::getline(archivo_clientes,linea)){
+      ss.clear();
+      ss<<linea;
+
+      incrementarListaClientes(lista_clientes,tamClientes);
+      char comma=';';
+
+      std::getline(ss,linea,comma);//idCliente
+      lista_clientes[tamClientes-1].idCliente=std::stoi(linea);
+
+      std:: getline(ss,lista_clientes[tamClientes-1].NombreCliente,comma);//nombrecliente
+
+      std:: getline(ss,lista_clientes[tamClientes-1].ApellidoCliente,comma);//apellidocliente
+
+      std:: getline(ss,lista_clientes[tamClientes-1].Email,comma);//emailcliente
+
+      std:: getline(ss,lista_clientes[tamClientes-1].Telefono,comma);//telefonocliente
+
+      std:: getline(ss,lista_clientes[tamClientes-1].FechaNac,comma);//fechanaccliente
+
+
+      std::getline(ss,linea,comma);//estado
+      lista_clientes[tamClientes-1].estado=std::stoi(linea);
+
 
     }
 }
@@ -107,6 +161,7 @@ void resizeInscripcion(sInscripcion *&CursoInscripto, unsigned int &cantInscript
 
 
 }
+/*
 int AgregarAsistencia(sAsistencia *&lista_asistencias, unsigned int &tamAsistencias, unsigned int idcliente, unsigned int idcurso, std::tm horaact){
     for(unsigned int i=0; i<tamAsistencias;i++){
        if(lista_asistencias[i].idCliente==idcliente){
@@ -118,6 +173,21 @@ int AgregarAsistencia(sAsistencia *&lista_asistencias, unsigned int &tamAsistenc
 
             lista_asistencias[i].CursosInscriptos[lista_asistencias[i].cantInscriptos-1]=InscripcionNueva;
 
+            std::ofstream archivo_binario;
+            archivo_binario.open("asistencias_1697673600000.dat",std::ios::binary);
+
+            if(!archivo_binario){
+                std::cout<< "No se pudo abrir el archivo binario" << std::endl;
+                std::cout<<"Hubo un problema al guardar su reserva, vuelva a intentarlo mas tarde."<<std::endl;
+                return 1;
+            }
+
+            archivo_binario.seekp(i); //posicion del cliente
+
+            archivo_binario.write((char*)(&lista_asistencias[i]),sizeof(sAsistencia)); //escribe la asistencia actualizada
+
+            archivo_binario.close();
+
             return 0;
        }
     }
@@ -127,21 +197,37 @@ int AgregarAsistencia(sAsistencia *&lista_asistencias, unsigned int &tamAsistenc
     sAsistencia nuevaAsistencia;
     nuevaAsistencia.idCliente= idcliente;
     nuevaAsistencia.cantInscriptos=1;
-    nuevaAsistencia.CursosInscriptos=new sInscripcion[1];
+    nuevaAsistencia.CursosInscriptos = new sInscripcion[1];
+
     nuevaAsistencia.CursosInscriptos[0].idCurso=idcurso;
     nuevaAsistencia.CursosInscriptos[0].timestamp=horaact;
 
-    resizeLista(lista_asistencias,tamAsistencias);
 
     lista_asistencias[tamAsistencias-1]=nuevaAsistencia;
 
 
+    std::ofstream archivo_binario;
+    archivo_binario.open("asistencias_1697673600000.dat",std::ios::binary);
 
-    delete [] nuevaAsistencia.CursosInscriptos;
+    if(!archivo_binario){
+       std::cout<< "No se pudo abrir el archivo binario" << std::endl;
+       std::cout<<"Hubo un problema al guardar su reserva, vuelva a intentarlo mas tarde."<<std::endl;
+       return 1;
+    }
+
+    archivo_binario.seekp(0, std::ios::end); //posicion al final
+
+    archivo_binario.write((char*)(&nuevaAsistencia),sizeof(sAsistencia));
+
+    archivo_binario.close();
+
+    //delete [] nuevaAsistencia.CursosInscriptos;
+
     return 0; //agregado con exito
 
 }
 
+*/
 
 
 

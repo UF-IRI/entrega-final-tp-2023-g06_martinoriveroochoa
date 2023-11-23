@@ -9,6 +9,9 @@ using namespace std;
 struct Clase;
 typedef struct Clase sClase;
 
+struct Cliente;
+typedef struct Cliente sCliente;
+
 struct Asistencia;
 typedef struct Asistencia sAsistencia;
 
@@ -17,8 +20,8 @@ typedef struct Inscripcion sInscripcion;
 
 int main() {
 
-    unsigned int primera_opcion, segunda_opcion, IDCLIENTE, IdCLIENTEmusculacion;
-    int exitoClase, PosicionClase, PosicionMusculacion, chequearReserva,chequearCupo, AgregarReserva;
+    unsigned int primera_opcion, segunda_opcion, IDCLIENTE, IdCLIENTEmusculacion,eleccion,eleccion2;
+    int exitoClase, PosicionClase, PosicionMusculacion,BuscarClientela ,chequearReserva,chequearCupo, AgregarReserva;
     std::string ClaseRequerida;
     tm hora_actual=obtenerHoraActual();
 
@@ -26,43 +29,78 @@ int main() {
     double HorarioMusculacion, HorarioClase;
     std::cout<<"Bienvenido a Musculito"<<std::endl;
     std::cout<<"Ingrese la opcion que desee"<<std::endl;
-    std::cout<<"1.Mostrar lista de reservas de hoy"<<std::endl<<"2.Realizar una reserva para el dia siguiente"<<std::endl;
+    std::cout<<"1.Mostrar info. de clases"<<std::endl<<"2.Realizar una reserva para el dia siguiente"<<std::endl;
     std::cin>>primera_opcion;
 
     if(primera_opcion==1){
-        if(esDomingo()){
-          std::cout << "¡Hoy es Domingo!.Los Domingos no abre nuestro gimnasio, por lo tanto no hay clases hoy" << std::endl;
+        std::cout << "----------GIMNASIO MUSCULITO-----------" << std::endl;
+        std::cout << "Lunes a Sabados: de 7 a 21 hs" << std::endl;
+        std::cout << "Clases: Spinning,Yoga,Pilates,Stretching,Zumba,Boxeo" << std::endl;
+        std::cout << "Ademas, gran espacio de musculacion" << std::endl;
+        std::cout << "1.Conocer horarios de clases" << std::endl<<"2.Conocer horarios de musculacion"<<std::endl<<"3.Salir"<<std::endl;
+        std::cin>>eleccion;
+        if(eleccion==1){
+          std::cout << "1.Spinning" << std::endl<< "2.Yoga" << std::endl<< "3.Pilates" << std::endl<<"4.Stretching" << std::endl<< "5.Zumba"<< std::endl << "6.Boxeo" << std::endl;
+          std::cin>>eleccion2;
+
+          switch(eleccion2){
+          case 1: std::cout << "8 am, 10 am, 12 pm, 16 pm, 18 pm " << std::endl;
+              break;
+          case 2: std::cout << "9 am, 10 am, 11 am, 15 pm, 16 pm, 19 pm " << std::endl;
+              break;
+          case 3: std::cout << "8 am, 9 am, 10 am, 12 pm, 18 pm, 19 pm" << std::endl;
+              break;
+          case 4: std::cout << "8 am, 14 pm, 15 pm, 16 pm, 18 pm, 19 pm" << std::endl;
+              break;
+          case 5: std::cout << "8 am, 10 am, 12 pm, 16 pm, 17 pm, 18 pm" << std::endl;
+              break;
+          case 6:  std::cout << "16 pm, 17 pm, 18 pm, 19 pm" << std::endl;
+              break;
+          default:
+              std::cout << "Opción no válida. Inténtalo de nuevo." << std::endl;
+          }
+
+
+        }
+        else if(eleccion==2){
+          std::cout << "Lunes a Sabados: de 7 a 20 hs" << std::endl;
+        }
+        else {
+            return 0;
         }
 
-        else{
-          std::cout<<"Eligio leer la lista de reservas de hoy"<<std::endl;
-        }
+
     }
 
     else if(primera_opcion==2){
         if (esSabado()){
           std::cout << "¡Hoy es Sabado!. Los Domingos no abre nuestro gimnasio. Intente nuevamente otro dia" << std::endl;
         }
-        else if((hora_actual.tm_hour<7) || (hora_actual.tm_hour>21)){
-
-          std::cout<< "Nuestro gimnasio abre de 7 a 21.Intente nuevamente en ese horario" << std::endl;
-        }
-
+        //la lista del lunes se creara cuando ingrese el domingo.
         else {
-
+          //abro archivo clases
          ifstream archivo_clases;
          archivo_clases.open("iriClasesGYM.csv");
-
 
           sClase *lista_clases=nullptr;
           unsigned int tamClases=0;
 
-          leerArchivosCSV(archivo_clases,lista_clases,tamClases);
-
-
-
+          leerArchivosCSVClase(archivo_clases,lista_clases,tamClases); //leo y creo lista de estructura con datos
           archivo_clases.close();
 
+
+          //abro archivo clientes
+          ifstream archivo_clientes;
+          archivo_clientes.open("iriClientesGYM.csv");
+
+
+          sCliente *lista_clientes=nullptr;
+          unsigned int tamClientes=0;
+
+          leerArchivosCSVClientes(archivo_clientes,lista_clientes,tamClientes);//leo y creo lista de estructura con datos
+          archivo_clientes.close();
+
+          //abro archivo binario
           ifstream archivo_binario;
           archivo_binario.open("asistencias_1697673600000.dat",std::ios::binary);
 
@@ -70,7 +108,7 @@ int main() {
           sAsistencia *lista_asistencias=nullptr;
           unsigned int tamAsistencias=0;
 
-          leerArchivoBinario(archivo_binario,lista_asistencias,tamAsistencias);
+          leerArchivoBinario(archivo_binario,lista_asistencias,tamAsistencias);//leo y creo lista de estructura con datos
           archivo_binario.close();
 
 
@@ -97,7 +135,10 @@ int main() {
                       std::cout << "La clase fue encontrada." << std::endl;
                       std::cout<<"Para continuar vamos a necesitar que ingreses tu id:"<< std::endl;
                       std::cin>>IDCLIENTE;
+                      BuscarClientela=BuscarCliente(lista_clientes,tamClientes,IDCLIENTE);
 
+                      if(BuscarClientela==0){
+                         //esta y no debe
 
 
                       //ya esta cargada la lista ahora chequear que no este ya inscripto a esa
@@ -108,15 +149,19 @@ int main() {
                              chequearCupo=ChequearSuCupo(lista_asistencias,tamAsistencias,lista_clases[PosicionClase].idClase, lista_clases[PosicionClase].cupo);
                              if(chequearCupo==0){
                                   std::cout<< "Todavia queda lugar! Continuamos con tu reserva..." << std::endl;
-                                 /*
+
+                                  /*
                                  AgregarReserva=AgregarAsistencia(lista_asistencias,tamAsistencias,IDCLIENTE,lista_clases[PosicionClase].idClase,hora_actual);
                                  if(AgregarReserva==0){
+
+
                                      lista_clases[PosicionClase].cupo--;
                                      std::cout<<"Ya esta anotado! Por favor, no falte"<<std::endl;
 
                                  }else{
                                      std::cout<<"Hubo un problema con su reserva, vuelva a intentarlo mas tarde."<<std::endl;
-                                 }*/
+                                 }
+                                 */
                               }
                              else if(chequearCupo==-1){
                                   std::cout<< "Lo siento, la clase elegida esta llena. Intente con otra!" << std::endl;
@@ -127,6 +172,23 @@ int main() {
                           else if(chequearReserva==-1){
                           std::cout<< "Ya tienes una reserva para esa clase." << std::endl;
                           }
+
+
+
+
+
+                      }
+                      else if(BuscarClientela==1){
+                         //esta pero debe plata
+                         std::cout << "Lo siento, primero debes actualizar tu cuota." << std::endl;
+                      }
+                      else {
+                         //no esta
+                         std::cout << "Lo siento, no eres socio del gym." << std::endl;
+                      }
+
+
+
 
 
                     }
@@ -151,30 +213,45 @@ int main() {
               if(PosicionMusculacion>0){
                   std::cout<<"Todo va en orden"<<std::endl<<"Por favor, ingrese su id:"<<std::endl;
                   std::cin>>IdCLIENTEmusculacion;
-                  chequearReserva=chequearSuReserva(lista_asistencias,tamAsistencias,lista_clases[PosicionMusculacion].idClase,IdCLIENTEmusculacion);
-                  if(chequearReserva==0){
-                   std::cout<< "Perfecto, usted no esta inscripto aun." << std::endl; //como no hay cupos limitados
-                   std::cout<< "Continuamos con tu reserva..." << std::endl;
-                   /*
-                   AgregarReserva=AgregarAsistencia(lista_asistencias,tamAsistencias,IdCLIENTEmusculacion,lista_clases[PosicionMusculacion].idClase,hora_actual);
-                   if(AgregarReserva==0){
+                  BuscarClientela=BuscarCliente(lista_clientes,tamClientes,IdCLIENTEmusculacion);
+
+                  if(BuscarClientela==0){
+                     //esta y no debe
+
+
+                     chequearReserva=chequearSuReserva(lista_asistencias,tamAsistencias,lista_clases[PosicionMusculacion].idClase,IdCLIENTEmusculacion);
+                     if(chequearReserva==0){
+                         std::cout<< "Perfecto, usted no esta inscripto aun." << std::endl; //como no hay cupos limitados
+                         std::cout<< "Continuamos con tu reserva..." << std::endl;
+                         /*
+                         AgregarReserva=AgregarAsistencia(lista_asistencias,tamAsistencias,IdCLIENTEmusculacion,lista_clases[PosicionMusculacion].idClase,hora_actual);
+                         if(AgregarReserva==0){
                           std::cout<<"Ya esta anotado! Por favor, no falte"<<std::endl;
-                   }
-                   else{
+                         }
+                         else{
                            std::cout<<"Hubo un problema con su reserva, vuelva a intentarlo mas tarde."<<std::endl;
-                   }*/
+                         }
+                         */
+                        }
+                        else if(chequearReserva==-1){
+                          std::cout<< "Ya tienes una reserva para ese horario." << std::endl;
+                        }
 
-                  }
-                  else if(chequearReserva==-1){
-                   std::cout<< "Ya tienes una reserva para ese horario." << std::endl;
-                  }
-
+                    }
+                  else if(BuscarClientela==1){
+                     //esta pero debe plata
+                     std::cout << "Lo siento, primero debes actualizar tu cuota." << std::endl;
+                    }
+                  else {
+                     //no esta
+                     std::cout << "Lo siento, no eres socio del gym." << std::endl;
+                    }
                 }
               else if(PosicionMusculacion==-1){
-                  std::cout<<"No hay musculacion a ese horario, lo siento."<<std::endl;
-              }
+                    std::cout<<"No hay musculacion a ese horario, lo siento."<<std::endl;
+                }
             }
-           else if (segunda_opcion!=1 && segunda_opcion!=2){
+            else if (segunda_opcion!=1 && segunda_opcion!=2){
               std::cout<<"Ingreso algo incorrecto"<<std::endl;
             }
 
@@ -183,6 +260,15 @@ int main() {
              delete[] lista_clases;
              lista_clases=nullptr;
             }
+           /*
+           for(int i =0;i<tamAsistencias;i++){
+             delete[]  lista_asistencias[i].CursosInscriptos;
+            }
+           if (lista_asistencias!=nullptr){
+             delete[] lista_asistencias;
+             lista_asistencias=nullptr;
+           }
+          */
         }
     }
     else {
@@ -194,10 +280,5 @@ int main() {
 
 
 
-/*
-    ofstream archivoTXT("Probando.txt");
-    escribirTXT(archivoTXT);
-    archivoTXT.close();
 
-*/
 

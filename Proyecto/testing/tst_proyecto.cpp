@@ -28,7 +28,7 @@ TEST_CASE("Leer archivo CSV y guardar en lista", "[leerArchivosCSV]"){
     sClase* lista_clases = nullptr;
     unsigned int tamClases = 0;
 
-    leerArchivosCSV(archivo_input, lista_clases, tamClases);
+    leerArchivosCSVClase(archivo_input, lista_clases, tamClases);
 
     // Asegúrate de que la función haya tenido éxito al leer el archivo CSV
     REQUIRE(tamClases == 3);

@@ -98,33 +98,20 @@ std::tm obtenerHoraActual(){
 
    return *hora_actual;
 }
-/*
-int agregarAsistencia(sAsistencia *listaAsistencia, unsigned int cantAsistencias, sInscripcion *listaInscripciones, int idcliente, int idclase, int hora_act){
 
-//chequeo primero si ya se anoto a alguna clase de mañana
 
-   for(unsigned int i=0;i<cantAsistencias;i++){
-      if(listaAsistencia[i].idCliente==idcliente){
-
-      //ya estaba anotada en alguna
-      resize(listaInscripciones,listaAsistencia[i].cantInscriptos) //agrega 1 lugar a la lista de inscripciones
-      listaAsistencia[i].cantInscriptos++;
-      listaAsistencias[i].CursosInscriptos[cantInscriptos-1].idCurso=idclase;
-      listaAsistencias[i].CursosInscriptos[canInscriptos-1].timestamp=hora_act; //chequear desp variable si es entero u otra
-      return 0;
-      }
-   }
-   if(i==cantAsistencias){
-    //no estaba anotada todavia
-    resize(listaAsistencia,cantAsistencias);
-    listaAsistencia[cantAsistencia-1].idCliente=idcliente;
-    listaAsistencia[cantAsistencia-1].cantInscriptos=1;
-    listaAsistencia[cantAsistencia-1].CursosInscriptos[cantInscriptos-1].idCurso=idclase;
-    listaAsistencia[cantAsistencia-1].CursosInscriptos[cantInscriptos-1].timestamp=hora_act;
-    return 0;
-    }
-    else{
-    return -1;
+int BuscarCliente(sCliente*lista_clientes,unsigned int tamClientes, int idcliente ){
+   for(unsigned int i=0;i<tamClientes;i++){
+      if(lista_clientes[i].idCliente==idcliente){
+          if(lista_clientes[i].estado!=0){
+            return 1;
+          }
+          else if (lista_clientes[i].estado==0){
+          return 0;
+          }
+        }
     }
 
-*/
+   return -1;
+
+}

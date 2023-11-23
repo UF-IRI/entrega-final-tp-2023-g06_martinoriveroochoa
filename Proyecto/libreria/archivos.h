@@ -2,6 +2,7 @@
 #define ARCHIVOS_H
 #include <fstream>
 #include <sstream>
+#include <ctime>
 
 
 struct Clase;
@@ -13,11 +14,16 @@ typedef struct Asistencia sAsistencia;
 struct Inscripcion;
 typedef struct Inscripcion sInscripcion;
 
+struct Cliente;
+typedef struct Cliente sCliente;
+
 
 void incrementarListaClases(sClase* &lista_clases,unsigned int &tamClases);
-void leerArchivosCSV(std::ifstream &archivo_clases, sClase *& lista_clases,unsigned int &tamClases);
-/*
-void escribirTXT(std::ofstream &archivoTXT);*/
+void leerArchivosCSVClase(std::ifstream &archivo_clases, sClase *& lista_clases,unsigned int &tamClases);
+void incrementarListaClientes(sCliente* &lista_clientes,unsigned int &tamClientes);
+void leerArchivosCSVClientes(std::ifstream &archivo_clientes, sCliente *& lista_clientes,unsigned int &tamClientes);
+
+
 void resizeLista(Asistencia*& listaAsistencias, unsigned int& tamAsistencias);
 void leerArchivoBinario(std::ifstream &archivo_binario,sAsistencia *&lista_asistencias,unsigned int &tamAsistencias);
 void resizeInscripcion(sInscripcion *&CursoInscripto, unsigned int &cantInscriptos);
