@@ -4,6 +4,8 @@
 #include <fstream>
 #include <sstream>
 #include "archivos.h"
+#include <cstring>
+
 using namespace std;
 
 struct Clase;
@@ -23,7 +25,7 @@ int main() {
     unsigned int primera_opcion, segunda_opcion, IDCLIENTE, IdCLIENTEmusculacion,eleccion,eleccion2;
     int exitoClase, PosicionClase, PosicionMusculacion,BuscarClientela ,chequearReserva,chequearCupo, AgregarReserva;
     std::string ClaseRequerida;
-    tm hora_actual=obtenerHoraActual();
+
 
 
     double HorarioMusculacion, HorarioClase;
@@ -100,17 +102,20 @@ int main() {
           leerArchivosCSVClientes(archivo_clientes,lista_clientes,tamClientes);//leo y creo lista de estructura con datos
           archivo_clientes.close();
 
-          //abro archivo binario
-          ifstream archivo_binario;
-          archivo_binario.open("asistencias_1697673600000.dat",std::ios::binary);
-
+          //creo archivo binario
 
           sAsistencia *lista_asistencias=nullptr;
           unsigned int tamAsistencias=0;
 
-          leerArchivoBinario(archivo_binario,lista_asistencias,tamAsistencias);//leo y creo lista de estructura con datos
-          archivo_binario.close();
+          std::ofstream archivo("listado_asistencias.dat", std::ios::binary | std::ios::out);
 
+          if (!archivo.is_open()) {
+              std::cout << "Error al crear el archivo." << std::endl;
+              return 1;  // Salir del programa con un código de error
+          }
+
+          const char* encabezado = "Lista de Reservas\n";
+          archivo.write(encabezado, strlen(encabezado));
 
 
           std::cout<<"Eligio hacer una reserva"<<std::endl<<"Ingrese la opcion de lo que desea reservar"<<std::endl<<"1.Clase"<<std::endl<<"2.Musculacion"<<std::endl;
@@ -141,17 +146,17 @@ int main() {
                          //esta y no debe
 
 
-                      //ya esta cargada la lista ahora chequear que no este ya inscripto a esa
+                          //ahora chequear que no este ya inscripto a esa
 
-                      chequearReserva=chequearSuReserva(lista_asistencias,tamAsistencias,lista_clases[PosicionClase].idClase,IDCLIENTE);
+                          chequearReserva=chequearSuReserva(lista_asistencias,tamAsistencias,lista_clases[PosicionClase].idClase,IDCLIENTE);
                           if(chequearReserva==0){
                           std::cout<< "Perfecto, usted no esta inscripto aun." << std::endl;
+
                              chequearCupo=ChequearSuCupo(lista_asistencias,tamAsistencias,lista_clases[PosicionClase].idClase, lista_clases[PosicionClase].cupo);
                              if(chequearCupo==0){
                                   std::cout<< "Todavia queda lugar! Continuamos con tu reserva..." << std::endl;
 
-                                  /*
-                                 AgregarReserva=AgregarAsistencia(lista_asistencias,tamAsistencias,IDCLIENTE,lista_clases[PosicionClase].idClase,hora_actual);
+                                 AgregarReserva=AgregarAsistencia(lista_asistencias,tamAsistencias,IDCLIENTE,lista_clases[PosicionClase].idClase);
                                  if(AgregarReserva==0){
 
 
@@ -161,7 +166,7 @@ int main() {
                                  }else{
                                      std::cout<<"Hubo un problema con su reserva, vuelva a intentarlo mas tarde."<<std::endl;
                                  }
-                                 */
+
                               }
                              else if(chequearCupo==-1){
                                   std::cout<< "Lo siento, la clase elegida esta llena. Intente con otra!" << std::endl;
@@ -172,12 +177,7 @@ int main() {
                           else if(chequearReserva==-1){
                           std::cout<< "Ya tienes una reserva para esa clase." << std::endl;
                           }
-
-
-
-
-
-                      }
+                        }
                       else if(BuscarClientela==1){
                          //esta pero debe plata
                          std::cout << "Lo siento, primero debes actualizar tu cuota." << std::endl;
@@ -186,9 +186,6 @@ int main() {
                          //no esta
                          std::cout << "Lo siento, no eres socio del gym." << std::endl;
                       }
-
-
-
 
 
                     }
@@ -223,15 +220,15 @@ int main() {
                      if(chequearReserva==0){
                          std::cout<< "Perfecto, usted no esta inscripto aun." << std::endl; //como no hay cupos limitados
                          std::cout<< "Continuamos con tu reserva..." << std::endl;
-                         /*
-                         AgregarReserva=AgregarAsistencia(lista_asistencias,tamAsistencias,IdCLIENTEmusculacion,lista_clases[PosicionMusculacion].idClase,hora_actual);
+
+                         AgregarReserva=AgregarAsistencia(lista_asistencias,tamAsistencias,IdCLIENTEmusculacion,lista_clases[PosicionMusculacion].idClase);
                          if(AgregarReserva==0){
                           std::cout<<"Ya esta anotado! Por favor, no falte"<<std::endl;
                          }
                          else{
                            std::cout<<"Hubo un problema con su reserva, vuelva a intentarlo mas tarde."<<std::endl;
                          }
-                         */
+
                         }
                         else if(chequearReserva==-1){
                           std::cout<< "Ya tienes una reserva para ese horario." << std::endl;
@@ -260,15 +257,17 @@ int main() {
              delete[] lista_clases;
              lista_clases=nullptr;
             }
-           /*
-           for(int i =0;i<tamAsistencias;i++){
-             delete[]  lista_asistencias[i].CursosInscriptos;
+
+           if (lista_clientes!=nullptr){
+             delete[]lista_clientes;
+             lista_clientes=nullptr;
             }
-           if (lista_asistencias!=nullptr){
-             delete[] lista_asistencias;
-             lista_asistencias=nullptr;
+           for (unsigned int i = 0; i < tamAsistencias; ++i) {
+             delete[] lista_asistencias[i].CursosInscriptos;
            }
-          */
+           delete[] lista_asistencias;
+
+           archivo.close();
         }
     }
     else {

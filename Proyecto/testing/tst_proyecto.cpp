@@ -57,7 +57,7 @@ TEST_CASE("Buscar por Nombre", "[buscarxnombre]"){
     int resultado=buscarPorNombre(listita,2,"spinning");
 
     REQUIRE(resultado==0);
-
+    delete[]listita;
 }
 
 TEST_CASE("Buscar por Nombre y Hora", "[buscarxnombreyhora]"){
@@ -77,6 +77,34 @@ TEST_CASE("Buscar por Nombre y Hora", "[buscarxnombreyhora]"){
     int resultado=buscarPorNombreYHorario(listita,2,"spinning",17.00);
 
     REQUIRE(resultado==0);
-
+    delete[]listita;
 }
+
+TEST_CASE("Buscar cliente", "[buscarcliente]"){
+    sCliente *listita=new sCliente[2];
+
+    listita[0].idCliente=1;
+    listita[0].NombreCliente="Juan";
+    listita[0].ApellidoCliente="Gonzales";
+    listita[0].Email="juangonzales@iri.com";
+    listita[0].Telefono=462-185-1730;
+    listita[0].FechaNac=10/12/1966;
+    listita[0].estado=0;
+
+    listita[1].idCliente=2;
+    listita[1].NombreCliente="Agustina";
+    listita[1].ApellidoCliente="Martinez";
+    listita[1].Email="agustinamartinez@iri.com";
+    listita[1].Telefono=317-427-6829;
+    listita[1].FechaNac=14/8/1998;
+    listita[1].estado=-3089;
+
+
+    int resultado=BuscarCliente(listita,2,2);
+
+    REQUIRE(resultado==1);
+    delete[]listita;
+}
+
+
 

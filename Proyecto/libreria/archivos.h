@@ -3,6 +3,7 @@
 #include <fstream>
 #include <sstream>
 #include <ctime>
+#include "gimnasio.h"
 
 
 struct Clase;
@@ -25,8 +26,8 @@ void leerArchivosCSVClientes(std::ifstream &archivo_clientes, sCliente *& lista_
 
 
 void resizeLista(Asistencia*& listaAsistencias, unsigned int& tamAsistencias);
-void leerArchivoBinario(std::ifstream &archivo_binario,sAsistencia *&lista_asistencias,unsigned int &tamAsistencias);
+
 void resizeInscripcion(sInscripcion *&CursoInscripto, unsigned int &cantInscriptos);
-int AgregarAsistencia(sAsistencia *&lista_asistencias, unsigned int &tamAsistencias, unsigned int idcliente, unsigned int idcurso, tm horaact);
+int AgregarAsistencia(sAsistencia *&lista_asistencias, unsigned int &tamAsistencias, unsigned int idcliente, unsigned int idcurso);
 
 #endif // ARCHIVOS_H

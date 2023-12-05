@@ -1,7 +1,6 @@
 #include "archivos.h"
-#include <fstream>
-#include <sstream>
-#include "gimnasio.h"
+
+
 
 
 
@@ -117,38 +116,7 @@ void resizeLista(Asistencia*& lista_asistencias, unsigned int& tamAsistencias){
     lista_asistencias = aux;
 }
 
-void leerArchivoBinario(std::ifstream &archivo_binario,sAsistencia *&lista_asistencias,unsigned int &tamAsistencias){
 
-
-    if(!archivo_binario.is_open()){
-      std::cout<<"Error al abrir el archivo"<<std::endl;
-      return;
-    }
-
-    unsigned int idCliente_aux=0, cantInscritos_aux=0;
-
-    while(archivo_binario){
-      resizeLista(lista_asistencias,tamAsistencias);
-      archivo_binario.read((char *)&idCliente_aux,sizeof(unsigned int));
-      archivo_binario.read((char *)&cantInscritos_aux,sizeof(unsigned int));
-
-      lista_asistencias[tamAsistencias-1].CursosInscriptos = new sInscripcion[cantInscritos_aux];
-
-      for(unsigned int i=0;i<cantInscritos_aux;i++){
-            archivo_binario.read((char*)&lista_asistencias[tamAsistencias-1].CursosInscriptos[i].idCurso,sizeof(unsigned int));
-            archivo_binario.read((char*)&lista_asistencias[tamAsistencias-1].CursosInscriptos[i].timestamp,sizeof(tm));
-
-
-      }
-       delete[] lista_asistencias[tamAsistencias-1].CursosInscriptos ;
-
-
-    }
-
-    delete[] lista_asistencias;
-    tamAsistencias = 0;
-
-}
 void resizeInscripcion(sInscripcion *&CursoInscripto, unsigned int &cantInscriptos){
     sInscripcion *aux=new sInscripcion[++cantInscriptos];
 
@@ -161,73 +129,85 @@ void resizeInscripcion(sInscripcion *&CursoInscripto, unsigned int &cantInscript
 
 
 }
-/*
-int AgregarAsistencia(sAsistencia *&lista_asistencias, unsigned int &tamAsistencias, unsigned int idcliente, unsigned int idcurso, std::tm horaact){
-    for(unsigned int i=0; i<tamAsistencias;i++){
-       if(lista_asistencias[i].idCliente==idcliente){
-            //ya esta en la lista
-            resizeInscripcion(lista_asistencias[i].CursosInscriptos,lista_asistencias[i].cantInscriptos);
-            sInscripcion InscripcionNueva;
-            InscripcionNueva.idCurso=idcurso;
-            InscripcionNueva.timestamp=horaact;
 
-            lista_asistencias[i].CursosInscriptos[lista_asistencias[i].cantInscriptos-1]=InscripcionNueva;
 
-            std::ofstream archivo_binario;
-            archivo_binario.open("asistencias_1697673600000.dat",std::ios::binary);
-
-            if(!archivo_binario){
-                std::cout<< "No se pudo abrir el archivo binario" << std::endl;
-                std::cout<<"Hubo un problema al guardar su reserva, vuelva a intentarlo mas tarde."<<std::endl;
-                return 1;
-            }
-
-            archivo_binario.seekp(i); //posicion del cliente
-
-            archivo_binario.write((char*)(&lista_asistencias[i]),sizeof(sAsistencia)); //escribe la asistencia actualizada
-
-            archivo_binario.close();
-
-            return 0;
-       }
+void AgregarArchiB2(sAsistencia &nuevaasistencia){
+    std:: ofstream archivo_asistencia;
+    archivo_asistencia.open("listado_asistencias.dat",std::ios::binary | std::ios::app);
+    if(!archivo_asistencia.is_open()){
+       return;
     }
 
-
-    //si no esta.
-    sAsistencia nuevaAsistencia;
-    nuevaAsistencia.idCliente= idcliente;
-    nuevaAsistencia.cantInscriptos=1;
-    nuevaAsistencia.CursosInscriptos = new sInscripcion[1];
-
-    nuevaAsistencia.CursosInscriptos[0].idCurso=idcurso;
-    nuevaAsistencia.CursosInscriptos[0].timestamp=horaact;
+    archivo_asistencia.write((char*)&nuevaasistencia,sizeof(sAsistencia));
 
 
-    lista_asistencias[tamAsistencias-1]=nuevaAsistencia;
 
+    archivo_asistencia.close();
 
-    std::ofstream archivo_binario;
-    archivo_binario.open("asistencias_1697673600000.dat",std::ios::binary);
-
-    if(!archivo_binario){
-       std::cout<< "No se pudo abrir el archivo binario" << std::endl;
-       std::cout<<"Hubo un problema al guardar su reserva, vuelva a intentarlo mas tarde."<<std::endl;
-       return 1;
-    }
-
-    archivo_binario.seekp(0, std::ios::end); //posicion al final
-
-    archivo_binario.write((char*)(&nuevaAsistencia),sizeof(sAsistencia));
-
-    archivo_binario.close();
-
-    //delete [] nuevaAsistencia.CursosInscriptos;
-
-    return 0; //agregado con exito
+    return;
 
 }
 
-*/
+void AgregarArchiB1(sAsistencia *&lista_asistencias,unsigned int &tamAsistencias){
+    std::ofstream archivo_asistencia;
+    archivo_asistencia.open("listado_asistencias.dat",std::ios::binary | std::ios::trunc);
+    if(!archivo_asistencia.is_open()){
+       return;
+    }
+    for(unsigned int i=0; i < tamAsistencias; i++) {
+       archivo_asistencia.write((char*)&lista_asistencias[i], sizeof(sAsistencia));
+
+    }
+    archivo_asistencia.close();
+}
+
+
+
+int AgregarAsistencia(sAsistencia *&lista_asistencias, unsigned int &tamAsistencias, unsigned int idcliente, unsigned int idcurso){
+    unsigned int i;
+
+    for(i=0;i< tamAsistencias;i++){
+       if(lista_asistencias[i].idCliente==idcliente){
+            //ya esta anotado en alguna clase dist para mañana
+            resizeInscripcion(lista_asistencias[i].CursosInscriptos,lista_asistencias[i].cantInscriptos);
+            sInscripcion nueva;
+            nueva.idCurso=idcurso;
+            time_t now = time(0);
+            tm *timestamp = localtime(&now);
+            nueva.timestamp=*timestamp;
+
+            lista_asistencias[i].CursosInscriptos[lista_asistencias[i].cantInscriptos-1]=nueva;
+
+            AgregarArchiB1(lista_asistencias,tamAsistencias);
+
+            return 0;
+
+       }
+    }
+
+    if(i==tamAsistencias){
+       //no lo encontro anotado
+       resizeLista(lista_asistencias,tamAsistencias);
+       sAsistencia nuevo;
+       nuevo.idCliente=idcliente;
+       nuevo.cantInscriptos=1;
+       nuevo.CursosInscriptos= new sInscripcion[nuevo.cantInscriptos];
+
+       nuevo.CursosInscriptos[0].idCurso=idcurso;
+       time_t now = time(0);
+       tm *timestamp = localtime(&now);
+       nuevo.CursosInscriptos[0].timestamp=*timestamp;
+
+       lista_asistencias[tamAsistencias-1]=nuevo;
+       AgregarArchiB2(lista_asistencias[tamAsistencias-1]);
+
+    }
+
+    return 0;
+
+}
+
+
 
 
 
