@@ -47,10 +47,10 @@ int chequearSuReserva(sAsistencia *&lista_asistencia,unsigned int &tamAsistencia
               //no esta inscripto aun
               return 0;
             }
-        }
+           }
     }
-
   }
+ return 0;
 
 }
 

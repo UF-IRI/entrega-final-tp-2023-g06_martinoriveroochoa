@@ -207,9 +207,25 @@ int AgregarAsistencia(sAsistencia *&lista_asistencias, unsigned int &tamAsistenc
 
 }
 
+/*
+int leerArchivoBinarioAsistencia(std::ifstream& archivo_asistencias, sAsistencia*& lista_asistencias, unsigned int& tamAsistencias){
+    if(archivo_asistencias.is_open()){
+            while(archivo_asistencias){
+                sAsistencia aux;
+                archivo_asistencias.read((char*)&aux,sizeof(sAsistencia));
+                resizeLista(lista_asistencias,tamAsistencias);
+                lista_asistencias[tamAsistencias-1]=aux;
+            }
+       }
+       else {
+            return 1;
+       }
+
+       return 0;
 
 
-
+}
+*/
 
 
 

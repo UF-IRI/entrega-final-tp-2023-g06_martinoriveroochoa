@@ -106,7 +106,24 @@ int main() {
 
           sAsistencia *lista_asistencias=nullptr;
           unsigned int tamAsistencias=0;
+          /*
+          mi idea era
+          std::ifstream archivo_binario("listado_asistencias.dat", std::ios::binary | std::ios::in);
 
+          int resultado= leerArchivoBinarioAsistencia(archivo_binario, lista_asistencias, tamAsistencias);
+          if(resultado==0){
+              std::cout<<"Cargado con exito"<<std::endl;
+          }
+          else if(resultado==1){
+              std::cout<<"Ocurrio un error"<<std::endl;
+          }
+          // codigo
+
+          archivo_binario.close();
+          que por si solo corre pero al agregar una reserva el programa crashea y no pude determinar porque.
+          De esta manera funciona pero, no compara con datos agregados anteriormente :(
+
+          */
           std::ofstream archivo("listado_asistencias.dat", std::ios::binary | std::ios::out);
 
           if (!archivo.is_open()) {
@@ -116,6 +133,7 @@ int main() {
 
           const char* encabezado = "Lista de Reservas\n";
           archivo.write(encabezado, strlen(encabezado));
+
 
 
           std::cout<<"Eligio hacer una reserva"<<std::endl<<"Ingrese la opcion de lo que desea reservar"<<std::endl<<"1.Clase"<<std::endl<<"2.Musculacion"<<std::endl;
@@ -262,12 +280,14 @@ int main() {
              delete[]lista_clientes;
              lista_clientes=nullptr;
             }
-           for (unsigned int i = 0; i < tamAsistencias; ++i) {
+
+           for (unsigned int i = 0; i < tamAsistencias; i++) {
              delete[] lista_asistencias[i].CursosInscriptos;
            }
            delete[] lista_asistencias;
 
-           archivo.close();
+          archivo.close();
+
         }
     }
     else {

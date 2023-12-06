@@ -29,5 +29,5 @@ void resizeLista(Asistencia*& listaAsistencias, unsigned int& tamAsistencias);
 
 void resizeInscripcion(sInscripcion *&CursoInscripto, unsigned int &cantInscriptos);
 int AgregarAsistencia(sAsistencia *&lista_asistencias, unsigned int &tamAsistencias, unsigned int idcliente, unsigned int idcurso);
-
+//int leerArchivoBinarioAsistencia(std::ifstream& archivo_asistencias, sAsistencia*& lista_asistencias, unsigned int& tamAsistencias);
 #endif // ARCHIVOS_H
